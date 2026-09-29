@@ -1,69 +1,51 @@
-import Image from "next/image";
+import Link from "next/link";
+import Converter from "@/components/Converter";
+import { BANKS, FORMAT_PAGES, SITE } from "@/lib/site";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div>
+      <section className="mx-auto max-w-3xl text-center">
+        <h1 className="text-4xl font-bold tracking-tight">Bank statement PDF → Excel, CSV, Xero or QuickBooks</h1>
+        <p className="mt-4 text-lg text-gray-600">
+          Built for European banks and statements in any language. Every conversion recomputes the running balance and flags the first row that doesn&apos;t add up.
+        </p>
+      </section>
+      <section className="mx-auto mt-10 max-w-3xl">
+        <Converter />
+      </section>
+
+      <section className="mt-16 grid gap-6 md:grid-cols-3">
+        {[
+          ["Any language", "French relevés, German Kontoauszüge, Spanish extractos, Chinese 流水 — descriptions stay in the original language, headers come out in English."],
+          ["Balance-checked", "Opening balance + every row = printed balance, or you hear about it. A missed line or misread digit is highlighted, not hidden."],
+          ["Nothing stored", "Files are processed in memory and discarded when the response is sent. No account needed to try it."],
+        ].map(([h, p]) => (
+          <div key={h} className="rounded-xl border border-gray-200 bg-white p-5">
+            <h2 className="font-semibold">{h}</h2>
+            <p className="mt-2 text-sm text-gray-600">{p}</p>
+          </div>
+        ))}
+      </section>
+
+      <section className="mt-16">
+        <h2 className="text-xl font-semibold">Export formats</h2>
+        <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+          {FORMAT_PAGES.map((f) => (
+            <li key={f.slug}><Link href={`/convert/${f.slug}`} className="text-blue-700 hover:underline">{f.h1}</Link></li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="text-xl font-semibold">Supported banks</h2>
+        <ul className="mt-3 grid gap-x-6 gap-y-1 sm:grid-cols-3 text-sm">
+          {BANKS.map((b) => (
+            <li key={b.slug}><Link href={`/banks/${b.slug}`} className="text-blue-700 hover:underline">{b.name} statement to Excel</Link></li>
+          ))}
+        </ul>
+        <p className="mt-3 text-sm text-gray-500">{SITE.name} reads any statement with a transaction table; these pages describe the banks we test against most.</p>
+      </section>
     </div>
   );
 }
